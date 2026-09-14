@@ -1,3 +1,5 @@
+package Test_Cases;
+
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
 import com.microsoft.playwright.options.AriaRole;
@@ -124,6 +126,6 @@ public class uiTesting2 {
 
         browser.close();
 
-        System.out.println("Ranjan commit test");
+
     }
 }

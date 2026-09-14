@@ -7,7 +7,7 @@
     <groupId>org.example</groupId>
     <artifactId>PlaywrightFramework</artifactId>
     <version>1.0-SNAPSHOT</version>
-// dependencies added by Ranjan
+<!-- dependencies added by Ranjan -->
      <dependencies>
 
          <!-- Source: https://mvnrepository.com/artifact/com.microsoft.playwright/playwright -->

@@ -1,3 +1,5 @@
+package Test_Cases;
+
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
 import com.microsoft.playwright.options.AriaRole;
@@ -11,7 +13,7 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 
 //import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
-public class BasicTest {
+public class BasicTesting_Demo {
 
     Playwright playwright;
     Browser browser;

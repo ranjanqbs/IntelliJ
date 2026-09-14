@@ -1,5 +1,6 @@
+package Test_Cases;
+
 import com.jayway.jsonpath.JsonPath;
-import com.microsoft.playwright.APIRequest;
 import com.microsoft.playwright.APIRequestContext;
 import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.Playwright;
@@ -8,6 +9,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class ApiTest {
 
@@ -33,7 +35,11 @@ public class ApiTest {
 
         Assert.assertTrue(loginResponse.ok());
 
+        System.out.println("Post request End here");
+
         // Now post call//////////////////////////////////////
+        System.out.println("Post Call Start here");
+
 
         String token = JsonPath.read(loginResponse.text(), "$.token");
         System.out.println("Login success "+token);
@@ -65,17 +71,54 @@ public class ApiTest {
         Assert.assertTrue(eventResponse.ok(), "Create Event API should succeed");
 
 
+
+
         //
-        String eventId = JsonPath.read(eventResponse.text(), "$.data.id").toString();
+        int eventId = JsonPath.read(eventResponse.text(), "$.data.id");
         System.out.println("Event created and its ID is "+eventId);
+        System.out.println("Post request End here");
 
+        // Now post call End here//////////////////////////////////////
 
+        //GET Method Start here ////////////
+        System.out.println("Get request Start here");
 
-        //GET Method
+        APIResponse retrieveEvents = apiRequest.get(
+                "https://api.eventhub.rahulshettyacademy.com/api/events",
+                RequestOptions.create()
+                        .setQueryParam("page", "1")
+                        .setQueryParam("limit", "12")
+                        .setHeader("Authorization", "Bearer " + token)
+        );
 
-        APIRequest relativeEvent = apiRequest.get("https://api.eventhub.rahulshettyacademy.com/api/events?page=1&limit=12",RequestOptions.create().setQueryParam("page","1")).setQueryParam("limit","12")).
+        Assert.assertTrue(
+                retrieveEvents.ok(),
+                "Event Retrieval API should succeed"
+        );
 
+        System.out.println(retrieveEvents.text());
 
+        List<Integer> allEventIds = JsonPath.read(
+                retrieveEvents.text(),
+                "$.data[*].id"
+        );
+
+        Assert.assertTrue(
+                allEventIds.contains(eventId),
+                "Created event should appear in events list"
+        );
+
+        System.out.println("Get request End here");
+        //GET Method End here ////////////
+
+        // Delete Method
+        APIResponse deleteResponse = apiRequest.delete(
+                "https://api.eventhub.rahulshettyacademy.com/api/event/" + eventId,
+                RequestOptions.create()
+                        .setHeader("Authorization", "Bearer " + token)
+        );
+
+        Assert.assertTrue(deleteResponse.ok());
 
 
 
