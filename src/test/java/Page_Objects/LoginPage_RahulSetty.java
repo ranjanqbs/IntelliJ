@@ -1,7 +1,9 @@
 package Page_Objects;
 
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
+import com.microsoft.playwright.options.LoadState;
 
 
 //Constructor for page object model
@@ -21,12 +23,13 @@ public class LoginPage_RahulSetty {
     }
 
 public void loginToApplication() {
-
+ 
     // Use the instance fields initialized in the constructor
     this.page.navigate(this.base_url);
-
+ 
     this.page.getByPlaceholder(email_placeholder).fill("ranjanqbs@gmail.com");
     this.page.getByLabel(password_placeholder).fill("Ranjan@121");
-    this.page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Sign in")).click();
-
+   this.page.locator("#login-btn").click(new Locator.ClickOptions().setTimeout(60000));
+   this.page.waitForLoadState(LoadState.NETWORKIDLE, new Page.WaitForLoadStateOptions().setTimeout(60000));
+ 
 }}

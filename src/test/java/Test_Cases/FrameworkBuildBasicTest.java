@@ -1,9 +1,7 @@
 package Test_Cases;
 
-import Page_Objects.AdminEvent_Page;
+import Page_Objects.*;
 
-import Page_Objects.DashBoard_Page;
-import Page_Objects.LoginPage_RahulSetty;
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
 import com.microsoft.playwright.options.AriaRole;
@@ -20,6 +18,8 @@ public class FrameworkBuildBasicTest extends BaseClass {
     public void DemoTest() {
         String eventTitle = "QA Summit Rahul Shetty " + System.currentTimeMillis();
 
+
+
         LoginPage_RahulSetty loginpage = new LoginPage_RahulSetty(page, base_url);
         loginpage.loginToApplication();
 
@@ -34,19 +34,17 @@ public class FrameworkBuildBasicTest extends BaseClass {
         page.waitForLoadState(LoadState.NETWORKIDLE);
 
         page.locator("#event-title-input").waitFor();
+
+
         adminEventPage.createEvent(eventTitle, "Rahul Shetty QA Meetups", "Concert", "Test City", "Test Venue", "2026-12-18T07:25", "100", "50");
 
-        page.locator("#nav-events").click(new Locator.ClickOptions().setTimeout(10000));
-        page.waitForTimeout(3000);
+        EventsPage eventPage = new EventsPage(page);
+        eventPage.goTo();
+        eventPage.findEventCards(eventTitle);
+        int seatsNumBeforeBooking = eventPage.getSeatsCount(eventTitle);
+        eventPage.proceedToBookingEvent(eventTitle);
 
-        Locator eventCards = page.getByTestId("event-card");
-        Locator targetCard = eventCards.filter(new Locator.FilterOptions().setHasText(eventTitle));
-        assertThat(targetCard).isVisible();
-
-        String seatsText = targetCard.getByText("seats").innerText();
-        int seatsNumBeforeBooking = Integer.parseInt(seatsText.split(" ")[0]);
-
-        targetCard.getByTestId("book-now-btn").click();
+        //  Book the ticket for event
         page.getByLabel("Full Name").fill("Test Student");
         page.locator("#customer-email").fill("test.student@example.com");
         page.getByPlaceholder("+91 98765 43210").fill("9876543210");
